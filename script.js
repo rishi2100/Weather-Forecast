@@ -47,6 +47,122 @@ const getWeatherDetails = (cityName, latitude, longitude) => {
         currentWeatherDiv.innerHTML = "";
         weatherCardsDiv.innerHTML = "";
 
+         // Extract temperature data for the chart
+         const temperatureData = fiveDaysForecast.map(forecast => (forecast.main.temp - 273.15).toFixed(2));
+         const dates = fiveDaysForecast.map(forecast => forecast.dt_txt.split(" ")[0]);
+ 
+         // Create the line chart
+         const ctx = document.getElementById('temperatureChart').getContext('2d');
+         const temperatureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: `Temperature (°C) in ${cityName}`,
+                    data: temperatureData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Light blue background color
+                    borderColor: 'rgba(54, 162, 235, 1)', // Solid blue line color
+                    borderWidth: 2 // Increase line width
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'rgba(255,255,255,0.5)' // Red color for y-axis ticks
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.2)' // Light red color for y-axis grid lines
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(255,255,255,0.5)' // Blue color for x-axis ticks
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.3)' // Light blue color for x-axis grid lines
+                        }
+                    }
+                }
+            }
+        });
+
+
+const ctxHumidity = document.getElementById('histogramChart').getContext('2d');
+const humidityData = fiveDaysForecast.map(forecast => forecast.main.humidity);
+const histogramChart = new Chart(ctxHumidity, {
+    type: 'bar',
+    data: {
+        labels: dates,
+        datasets: [{
+            label: `Humidity Level (%) in ${cityName}`,
+            data: humidityData,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)', // Red color for bars
+            borderColor: 'rgba(255, 99, 132, 1)', // Solid red border color
+            borderWidth: 1 // Border width of bars
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: 'rgba(255,255,255,0.5)' // Red color for y-axis ticks
+                },
+                grid: {
+                    color: 'rgba(255,255,255,0.2)' // Light red color for y-axis grid lines
+                }
+            },
+            x: {
+                ticks: {
+                    color: 'rgba(255,255,255,0.5)' // Blue color for x-axis ticks
+                },
+                grid: {
+                    color: 'rgba(255,255,255,0.3)' // Light blue color for x-axis grid lines
+                }
+            }
+        }
+    }
+});
+
+const ctxWind = document.getElementById('windChart').getContext('2d');
+const windData = fiveDaysForecast.map(forecast => forecast.wind.speed);
+const windChart = new Chart(ctxWind, {
+    type: 'bar',
+    data: {
+        labels: dates,
+        datasets: [{
+            label: `Wind Speed Level (M/S) in ${cityName}`,
+            data: windData,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Green color for bars
+            borderColor: 'rgba(75, 192, 192, 1)', // Solid green border color
+            borderWidth: 1 // Border width of bars
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: 'rgba(255,255,255,0.5)' // Red color for y-axis ticks
+                },
+                grid: {
+                    color: 'rgba(255,255,255,0.2)' // Light red color for y-axis grid lines
+                }
+            },
+            x: {
+                ticks: {
+                    color: 'rgba(255,255,255,0.5)' // Blue color for x-axis ticks
+                },
+                grid: {
+                    color: 'rgba(255,255,255,0.3)' // Light blue color for x-axis grid lines
+                }
+            }
+        }
+    }
+});
+
         // Creating weather cards and adding them to the DOM
         fiveDaysForecast.forEach((weatherItem, index) => {
             const html = createWeatherCard(cityName, weatherItem, index);
@@ -101,3 +217,13 @@ const getUserCoordinates = () => {
 locationButton.addEventListener("click", getUserCoordinates);
 searchButton.addEventListener("click", getCityCoordinates);
 cityInput.addEventListener("keyup", e => e.key === "Enter" && getCityCoordinates());
+
+
+
+
+
+
+
+
+
+
